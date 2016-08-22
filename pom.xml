@@ -71,7 +71,6 @@
 					<imageName>pipeline-role-service</imageName>
 					<forceTags>true</forceTags>
 					<imageTags>
-						<imageTag>${project.version}</imageTag>
 						<imageTag>latest</imageTag>
 					</imageTags>
 					<baseImage>java</baseImage>
