@@ -1,33 +1,44 @@
 package com.hpe.devops.api.role;
 
-import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin
 @RequestMapping(value = "/roles", produces = { "application/json" })
 public class RoleController {
 
-	
 	@Autowired
 	private RoleRepository roleRepo;
 	
-	@RequestMapping(value = "", method = RequestMethod.GET)
-	public List<Role> allRoles() throws Exception {
+	@RequestMapping(value="/organization/{organizationId}", method = RequestMethod.GET)
+	public List<Role> getRolesByOrgId(@PathVariable String organizationId ) throws Exception {
 		
-		return roleRepo.findAll();
+		return roleRepo.findByOrganizationId(organizationId);
 	}
+	
+	@RequestMapping(value="/{roleId}",  method = RequestMethod.GET)
+	public ResponseEntity<Role> getRole(@PathVariable String roleId) throws Exception {
+		
+		return new ResponseEntity<Role>(roleRepo.findOne(roleId), HttpStatus.OK);
+	}
+	
 	
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public ResponseEntity<Role> addRole(@RequestBody Role reqRole) throws Exception {
-		if (reqRole.getId() == -1) {
-			reqRole.setId(new Date().getTime());
-		}
+		
+		reqRole.setId(UUID.randomUUID().toString());
+		
 		Role org = roleRepo.save(reqRole);
 		
 		return new ResponseEntity<Role>(org, HttpStatus.CREATED);
@@ -41,8 +52,8 @@ public class RoleController {
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<String> deleteRole(@PathVariable Long id) throws Exception {
-//		Role org = roleRepo.findById(id);
+	public ResponseEntity<String> deleteRole(@PathVariable String id) throws Exception {
+
 		roleRepo.delete(id);
 		
 		return new ResponseEntity<String>("Deleted", HttpStatus.OK);

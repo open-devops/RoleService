@@ -4,9 +4,10 @@ import org.springframework.data.annotation.Id;
 
 public class Role {
 
-    @Id
-    private Long id = -1l;
+    private String id;
 
+    private String organizationId;
+    
     private String name;
     
     private String description;
@@ -15,18 +16,27 @@ public class Role {
     	
     }
     
-	public Role(String name, String description) {
+	public Role(String organizationId, String name, String description) {
 		super();
+		this.organizationId = organizationId;
 		this.name = name;
 		this.description = description;
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getOrganizationId() {
+		return organizationId;
+	}
+
+	public void setOrganizationId(String organizationId) {
+		this.organizationId = organizationId;
 	}
 
 	public String getName() {
@@ -45,6 +55,5 @@ public class Role {
 		this.description = description;
 	}
 
-    
-    
+        
 }
