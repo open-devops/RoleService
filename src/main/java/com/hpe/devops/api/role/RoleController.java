@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CrossOrigin
 @RequestMapping(value = "/roles", produces = { "application/json" })
 public class RoleController {
 
@@ -28,9 +27,9 @@ public class RoleController {
 	}
 	
 	@RequestMapping(value="/{roleId}",  method = RequestMethod.GET)
-	public ResponseEntity<Role> getRole(@PathVariable String roleId) throws Exception {
+	public Role getRoleById(@PathVariable String roleId) throws Exception {
 		
-		return new ResponseEntity<Role>(roleRepo.findOne(roleId), HttpStatus.OK);
+		return roleRepo.findOne(roleId);
 	}
 	
 	
@@ -52,10 +51,12 @@ public class RoleController {
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<String> deleteRole(@PathVariable String id) throws Exception {
+	public ResponseEntity<Role> deleteRole(@PathVariable String id) throws Exception {
 
+		Role role = this.getRoleById(id);
+		
 		roleRepo.delete(id);
 		
-		return new ResponseEntity<String>("Deleted", HttpStatus.OK);
+		return new ResponseEntity<Role>(role, HttpStatus.OK);
 	}
 }
